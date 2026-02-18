@@ -1,0 +1,14 @@
+.fondo-ibero {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("../img/fondo-ibero.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+/* Cards */
+.aviso-img {
+    max-width: 600px;   /* ajusta el tamaño */
+    width: 100%;
+    margin-top: 20px;
+}
