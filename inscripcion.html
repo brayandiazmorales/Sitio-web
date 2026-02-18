@@ -1,0 +1,167 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscripción | Sistema Escolar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="fondo-panel">
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <div class="container-fluid">
+        <span class="navbar-brand">Preparatoria Iberoamericana</span>
+        <a href="panel-alumno.html" class="btn btn-light btn-sm">Volver al panel</a>
+    </div>
+</nav>
+<!-- CONTENIDO -->
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h3>Formulario de Inscripción</h3>
+        <p class="text-muted">
+            Completa correctamente la información solicitada. Todos los campos son obligatorios.
+        </p>
+    </div>
+    <!-- MENSAJE INFORMATIVO -->
+    <div class="alert alert-info">
+        La asignación de grupo se realizará automáticamente por el área administrativa una vez validada la información.
+    </div>
+    <!-- FORMULARIO -->
+    <div class="card mx-auto" style="max-width: 850px;">
+        <div class="card-body">
+            <form novalidate>
+                <!-- DATOS PERSONALES -->
+                <h5 class="mb-3">Datos del Alumno</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre(s)</label>
+                        <input type="text" class="form-control" required minlength="3">
+                        <div class="invalid-feedback">
+                            Ingresa un nombre válido.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" required minlength="3">
+                        <div class="invalid-feedback">
+                            Ingresa los apellidos completos.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">CURP</label>
+                        <input type="text"
+                               class="form-control"
+                               pattern="[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}"
+                               required>
+                        <div class="invalid-feedback">
+                            CURP no válida.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel"
+                               class="form-control"
+                               pattern="[0-9]{10}"
+                               required>
+                        <div class="invalid-feedback">
+                            Ingresa un número de 10 dígitos.
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Ingresa un correo válido.
+                        </div>
+                    </div>
+                </div>
+                <!-- DATOS ACADÉMICOS -->
+                <h5 class="mb-3">Datos Académicos</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">Semestre</label>
+                        <select class="form-select" required>
+                            <option value="">Selecciona</option>
+                            <option>1°</option>
+                            <option>2°</option>
+                            <option>3°</option>
+                            <option>4°</option>
+                            <option>5°</option>
+                            <option>6°</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Selecciona un semestre.
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Turno</label>
+                        <select class="form-select" required>
+                            <option value="">Selecciona</option>
+                            <option>Matutino</option>
+                            <option>Vespertino</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Selecciona un turno.
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Grupo</label>
+                        <input type="text"class="form-control" value="Asignado por control escolar" disabled>
+                    </div> 
+                </div>
+                <!-- DOCUMENTACIÓN -->
+                <h5 class="mb-3">Documentación</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Acta de nacimiento (PDF)</label>
+                        <input type="file" class="form-control" accept=".pdf" required>
+                        <div class="invalid-feedback">
+                            Adjunta el documento en formato PDF.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Certificado de secundaria (PDF)</label>
+                        <input type="file" class="form-control" accept=".pdf" required>
+                        <div class="invalid-feedback">
+                            Adjunta el documento en formato PDF.
+                        </div>
+                    </div>
+                </div>
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="panel-alumno.html" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">
+                        Enviar Inscripción
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- FOOTER -->
+<footer class="text-center text-light py-3 mt-5">
+    © 2026 Preparatoria Iberoamericana
+</footer>
+<!-- VALIDACIÓN BOOTSTRAP -->
+<script>
+(() => {
+    'use strict';
+    const forms = document.querySelectorAll('form');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+</body>
+</html>
+
+				

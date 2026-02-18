@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprobante de Inscripción</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="fondo-panel">
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-primary shadow">
+    <div class="container-fluid">
+        <span class="navbar-brand">Preparatoria Iberoamericana</span>
+        <a href="panel-alumno.html" class="btn btn-light btn-sm">Volver al panel</a>
+    </div>
+</nav>
+<!-- CONTENIDO -->
+<div class="container my-5">
+
+    <div class="card mx-auto voucher-card">
+        <div class="card-body p-4">
+            <!-- ENCABEZADO -->
+            <div class="text-center mb-4">
+                <h4>Comprobante de Inscripción</h4>
+                <p class="text-muted mb-0">Sistema de Inscripciones Escolares</p>
+                <hr>
+            </div>
+            <!-- DATOS DEL ALUMNO -->
+            <h6>Datos del Alumno</h6>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Nombre:</strong> Nombre del Alumno</div>
+                <div class="col-md-6"><strong>Matrícula:</strong> 2026-0001</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Correo:</strong> correo@ibero.edu.mx</div>
+                <div class="col-md-6"><strong>Teléfono:</strong> 81 0000 0000</div>
+            </div>
+            <hr>
+            <!-- DATOS ACADÉMICOS -->
+            <h6>Datos Académicos</h6>
+            <div class="row mb-3">
+                <div class="col-md-4"><strong>Semestre:</strong> 1°</div>
+                <div class="col-md-4"><strong>Turno:</strong> Matutino</div>
+                <div class="col-md-4"><strong>Grupo:</strong> Asignado por control escolar</div>
+            </div>
+            <hr>
+            <!-- PAGO -->
+            <h6>Información de Pago</h6>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Concepto:</strong> Inscripción Semestral</div>
+                <div class="col-md-6"><strong>Monto:</strong> $3,500.00 MXN</div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6"><strong>Referencia:</strong> IBERO-2026-0001</div>
+                <div class="col-md-6">
+                    <strong>Estado:</strong>
+                    <span class="badge bg-warning text-dark">Pendiente de validación</span>
+                </div>
+            </div>
+            <div class="alert alert-info">
+                Este comprobante deberá presentarse para la validación del pago.
+            </div>
+            <!-- BOTONES -->
+            <div class="d-flex justify-content-end gap-2 no-print">
+                <button type="button" class="btn btn-secondary" onclick="window.print();">
+                    Imprimir
+                </button>
+                <button type="button" class="btn btn-primary">
+                    Descargar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="text-center text-light py-3 mt-5">
+    © 2026 Preparatoria Iberoamericana
+</footer>
+</body>
+</html>

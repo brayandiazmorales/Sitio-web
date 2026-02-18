@@ -12,3 +12,43 @@
     width: 100%;
     margin-top: 20px;
 }
+
+/* =========================
+   CARD GENERAL
+========================= */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+/* Voucher ancho controlado */
+.voucher-card {
+    max-width: 850px;
+}
+
+/* =========================
+   IMPRESIÓN (MUY IMPORTANTE)
+========================= */
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    nav,
+    footer,
+    .no-print {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #000;
+    }
+
+    .container {
+        margin: 0;
+        padding: 0;
+    }
+}
