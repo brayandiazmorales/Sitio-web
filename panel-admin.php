@@ -1,5 +1,12 @@
 <?php
+session_start();
 require_once __DIR__ . "/config/db.php";
+
+/* Seguridad: solo admin */
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+    header("Location: login.php");
+    exit;
+}
 
 $sql = "SELECT * FROM inscripciones ORDER BY fecha DESC";
 $result = $conn->query($sql);
@@ -17,29 +24,37 @@ $result = $conn->query($sql);
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="fondo-panel">
+
 <nav class="navbar navbar-dark bg-primary">
     <div class="container-fluid">
         <span class="navbar-brand">Panel Administrativo</span>
+        <a href="logout.php" class="btn btn-light btn-sm">Cerrar sesión</a>
     </div>
 </nav>
+
 <div class="container my-5">
+
     <h3 class="mb-4">Validación de Inscripciones</h3>
+
     <div class="card">
         <div class="card-body table-responsive">
+
             <table class="table table-striped align-middle">
                 <thead>
                     <tr>
                         <th>Matrícula</th>
                         <th>Alumno</th>
                         <th>Semestre</th>
-                        <th>Grupo</th> <!-- ✅ NUEVA COLUMNA -->
+                        <th>Grupo</th>
                         <th>Monto</th>
                         <th>Referencia</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while($row = $result->fetch_assoc()): ?>
@@ -47,13 +62,14 @@ $result = $conn->query($sql);
                             <td><?= htmlspecialchars($row['matricula']) ?></td>
                             <td><?= htmlspecialchars($row['alumno']) ?></td>
                             <td><?= htmlspecialchars($row['semestre']) ?></td>
-                            <!-- ✅ GRUPO -->
+
                             <td>
                                 <?= $row['grupo'] ? htmlspecialchars($row['grupo']) : '—' ?>
                             </td>
+
                             <td>$<?= number_format($row['monto'], 2) ?></td>
                             <td><?= htmlspecialchars($row['referencia']) ?></td>
-                            <!-- ✅ ESTADO -->
+
                             <td>
                                 <?php if ($row['estado'] === 'Validado'): ?>
                                     <span class="badge bg-success">Validado</span>
@@ -63,21 +79,31 @@ $result = $conn->query($sql);
                                     <span class="badge bg-warning text-dark">Pendiente</span>
                                 <?php endif; ?>
                             </td>
+
                             <!-- ✅ ACCIONES -->
                             <td>
                                 <?php if ($row['estado'] === 'Pendiente'): ?>
                                     <a href="validar.php?id=<?= $row['id'] ?>"
-                                       class="btn btn-success btn-sm">
+                                       class="btn btn-success btn-sm mb-1">
                                         Validar
                                     </a>
-                                    <a href="validar.php?id=<?= $row['id'] ?>&rechazar=1"
-                                       class="btn btn-danger btn-sm">
-                                        Rechazar
-                                    </a>
-                                <?php else: ?>
-                                    <span class="text-muted">Procesado</span>
                                 <?php endif; ?>
+
+                                <!-- ✅ BOTÓN ELIMINAR -->
+                                <form action="eliminar-inscripcion.php"
+                                      method="POST"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('¿Seguro que deseas eliminar esta inscripción?');">
+
+                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm">
+                                        Eliminar
+                                    </button>
+                                </form>
                             </td>
+
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -88,9 +114,13 @@ $result = $conn->query($sql);
                     </tr>
                 <?php endif; ?>
                 </tbody>
+
             </table>
+
         </div>
     </div>
+
 </div>
+
 </body>
 </html>
