@@ -18,7 +18,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
     <div class="container-fluid">
         <span class="navbar-brand">Preparatoria Iberoamericana</span>
-        <a href="panel-alumno.html" class="btn btn-light btn-sm">Volver al panel</a>
+        <a href="panel-alumno.php" class="btn btn-light btn-sm">Volver al panel</a>
     </div>
 </nav>
 
@@ -41,7 +41,6 @@
     <div class="card mx-auto" style="max-width: 850px;">
         <div class="card-body">
 
-            <!--FORM CORRECTO -->
             <form action="inscripcion.php" method="POST" novalidate>
 
                 <!-- DATOS PERSONALES -->
@@ -50,22 +49,29 @@
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
                         <label class="form-label">Nombre completo</label>
-                        <input type="text" name="alumno" class="form-control" required minlength="3">
-                        <div class="invalid-feedback">Ingresa un nombre válido.</div>
+                        <input type="text"
+                               name="alumno"
+                               class="form-control"
+                               required
+                               minlength="3">
+                        <div class="invalid-feedback">
+                            Ingresa un nombre válido.
+                        </div>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Teléfono</label>
-                        <input type="tel" name="telefono" class="form-control" pattern="[0-9]{10}" required>
-                        <div class="invalid-feedback">Ingresa un número de 10 dígitos.</div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label class="form-label">Correo electrónico</label>
-                        <input type="email" name="correo" class="form-control" required>
-                        <div class="invalid-feedback">Ingresa un correo válido.</div>
+                        <input type="tel"
+                               name="telefono"
+                               class="form-control"
+                               pattern="[0-9]{10}"
+                               required>
+                        <div class="invalid-feedback">
+                            Ingresa un número de 10 dígitos.
+                        </div>
                     </div>
                 </div>
+
                 <!-- DATOS ACADÉMICOS -->
                 <h5 class="mb-3">Datos Académicos</h5>
 
@@ -81,7 +87,9 @@
                             <option value="5°">5°</option>
                             <option value="6°">6°</option>
                         </select>
-                        <div class="invalid-feedback">Selecciona un semestre.</div>
+                        <div class="invalid-feedback">
+                            Selecciona un semestre.
+                        </div>
                     </div>
 
                     <div class="col-md-4">
@@ -91,25 +99,31 @@
                             <option value="Matutino">Matutino</option>
                             <option value="Vespertino">Vespertino</option>
                         </select>
-                        <div class="invalid-feedback">Selecciona un turno.</div>
+                        <div class="invalid-feedback">
+                            Selecciona un turno.
+                        </div>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Grupo</label>
-                        <input type="text" class="form-control" value="Asignado por control escolar" disabled>
+                        <input type="text"
+                               class="form-control"
+                               value="Asignado por control escolar"
+                               disabled>
                     </div>
                 </div>
 
                 <!-- BOTONES -->
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="panel-alumno.html" class="btn btn-secondary">Cancelar</a>
+                    <a href="panel-alumno.php" class="btn btn-secondary">
+                        Cancelar
+                    </a>
                     <button type="submit" class="btn btn-primary">
                         Enviar Inscripción
                     </button>
                 </div>
 
             </form>
-            <!-- ✅ FIN FORM -->
 
         </div>
     </div>

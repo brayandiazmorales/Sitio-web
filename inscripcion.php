@@ -1,26 +1,46 @@
 <?php
+session_start();
 require_once __DIR__ . "/config/db.php";
 
-// Validar que el formulario venga por POST
+/* Seguridad: solo alumno logueado */
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'alumno') {
+    header("Location: login.php");
+    exit;
+}
+
+/* Validar que el formulario venga por POST */
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: inscripcion.html");
     exit;
 }
 
-// Recibir datos del formulario
-$matricula  = "2026-" . rand(1000, 9999); // matrícula automática
-$alumno     = $_POST["alumno"];
-$correo     = $_POST["correo"];
-$telefono   = $_POST["telefono"];
-$semestre   = $_POST["semestre"];
-$turno      = $_POST["turno"];
-$monto      = 3500; // monto fijo
+/* =========================
+   DATOS DEL ALUMNO
+========================= */
+
+// Matrícula automática
+$matricula  = "2026-" . rand(1000, 9999);
+
+// Datos del formulario
+$alumno   = trim($_POST["alumno"]);
+$telefono = trim($_POST["telefono"]);
+$semestre = $_POST["semestre"];
+$turno    = $_POST["turno"];
+
+// ✅ Correo tomado de la sesión
+$correo = $_SESSION["correo"];
+
+// Datos de pago
+$monto      = 3500;
 $referencia = "IBERO-" . $matricula;
 
-// Insertar en la BD
-$sql = "INSERT INTO inscripciones 
-(matricula, alumno, correo, telefono, semestre, turno, monto, referencia)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+/* =========================
+   INSERTAR EN BASE DE DATOS
+========================= */
+
+$sql = "INSERT INTO inscripciones
+        (matricula, alumno, correo, telefono, semestre, turno, monto, referencia)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
@@ -37,6 +57,9 @@ $stmt->bind_param(
 
 $stmt->execute();
 
-// Redirigir al voucher
-header("Location: voucher.html");
+/* =========================
+   REDIRECCIÓN AL VOUCHER
+========================= */
+
+header("Location: voucher.php");
 exit;

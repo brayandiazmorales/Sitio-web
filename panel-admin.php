@@ -2,12 +2,13 @@
 session_start();
 require_once __DIR__ . "/config/db.php";
 
-/* Seguridad: solo admin */
+/* Seguridad: solo administrador */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
     header("Location: login.php");
     exit;
 }
 
+/* Obtener inscripciones */
 $sql = "SELECT * FROM inscripciones ORDER BY fecha DESC";
 $result = $conn->query($sql);
 ?>
@@ -27,13 +28,25 @@ $result = $conn->query($sql);
 
 <body class="fondo-panel">
 
-<nav class="navbar navbar-dark bg-primary">
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-primary shadow">
     <div class="container-fluid">
-        <span class="navbar-brand">Panel Administrativo</span>
-        <a href="logout.php" class="btn btn-light btn-sm">Cerrar sesión</a>
+        <span class="navbar-brand">Preparatoria Iberoamericana</span>
+        <div>
+            <a href="alta-alumno.php" class="btn btn-outline-light btn-sm me-2">
+                Alta de Alumno
+            </a>
+            <a href="validar-pago.php" class="btn btn-outline-light btn-sm me-2">
+                Validar Pago
+            </a>
+            <a href="logout.php" class="btn btn-light btn-sm">
+                Cerrar sesión
+            </a>
+        </div>
     </div>
 </nav>
 
+<!-- CONTENIDO -->
 <div class="container my-5">
 
     <h3 class="mb-4">Validación de Inscripciones</h3>
@@ -50,26 +63,24 @@ $result = $conn->query($sql);
                         <th>Grupo</th>
                         <th>Monto</th>
                         <th>Referencia</th>
-                        <th>Estado</th>
+                        <th>Estado Académico</th>
+                        <th>Estado de Pago</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                 <?php if ($result->num_rows > 0): ?>
-                    <?php while($row = $result->fetch_assoc()): ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?= htmlspecialchars($row['matricula']) ?></td>
                             <td><?= htmlspecialchars($row['alumno']) ?></td>
                             <td><?= htmlspecialchars($row['semestre']) ?></td>
-
-                            <td>
-                                <?= $row['grupo'] ? htmlspecialchars($row['grupo']) : '—' ?>
-                            </td>
-
+                            <td><?= $row['grupo'] ? htmlspecialchars($row['grupo']) : '—' ?></td>
                             <td>$<?= number_format($row['monto'], 2) ?></td>
                             <td><?= htmlspecialchars($row['referencia']) ?></td>
 
+                            <!-- Estado académico -->
                             <td>
                                 <?php if ($row['estado'] === 'Validado'): ?>
                                     <span class="badge bg-success">Validado</span>
@@ -80,7 +91,16 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
                             </td>
 
-                            <!-- ✅ ACCIONES -->
+                            <!-- Estado de pago -->
+                            <td>
+                                <?php if ($row['estado_pago'] === 'Pagado'): ?>
+                                    <span class="badge bg-success">Pagado</span>
+                                <?php else: ?>
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                <?php endif; ?>
+                            </td>
+
+                            <!-- Acciones -->
                             <td>
                                 <?php if ($row['estado'] === 'Pendiente'): ?>
                                     <a href="validar.php?id=<?= $row['id'] ?>"
@@ -89,26 +109,21 @@ $result = $conn->query($sql);
                                     </a>
                                 <?php endif; ?>
 
-                                <!-- ✅ BOTÓN ELIMINAR -->
                                 <form action="eliminar-inscripcion.php"
                                       method="POST"
                                       style="display:inline;"
                                       onsubmit="return confirm('¿Seguro que deseas eliminar esta inscripción?');">
-
                                     <input type="hidden" name="id" value="<?= $row['id'] ?>">
-
-                                    <button type="submit"
-                                            class="btn btn-danger btn-sm">
+                                    <button type="submit" class="btn btn-danger btn-sm">
                                         Eliminar
                                     </button>
                                 </form>
                             </td>
-
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="8" class="text-center">
+                        <td colspan="9" class="text-center">
                             No hay registros.
                         </td>
                     </tr>

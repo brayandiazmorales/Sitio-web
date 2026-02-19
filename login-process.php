@@ -44,19 +44,32 @@ if ($result->num_rows === 1) {
 
     $usuario = $result->fetch_assoc();
 
+    /* 🔐 Regenerar sesión (seguridad) */
+    session_regenerate_id(true);
+
     /* Crear sesión */
     $_SESSION['id']     = $usuario['id'];
     $_SESSION['nombre'] = $usuario['nombre'];
     $_SESSION['correo'] = $usuario['correo'];
     $_SESSION['rol']    = $usuario['rol'];
 
-    /* Redirección por rol */
+    /* =========================
+       6. Redirección por rol
+    ========================= */
+
     if ($usuario['rol'] === 'admin') {
         header("Location: panel-admin.php");
-    } else {
-        header("Location: panel-alumno.php");
+        exit;
     }
-    exit;
+
+    if ($usuario['rol'] === 'alumno') {
+        header("Location: panel-alumno.php");
+        exit;
+    }
+
+    /* Si el rol no es válido */
+    session_destroy();
+    die("❌ Rol no autorizado.");
 
 } else {
     die("❌ Correo o contraseña incorrectos.");

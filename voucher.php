@@ -1,7 +1,37 @@
 <?php
-// ID de la inscripción (por ahora fijo para pruebas)
-// Más adelante se tomará desde sesión
-$id = 1;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+require_once __DIR__ . "/config/db.php";
+
+/* Seguridad: solo alumno */
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'alumno') {
+    header("Location: login.php");
+    exit;
+}
+
+$correo = $_SESSION['correo'];
+
+/* Obtener última inscripción del alumno */
+$sql = "SELECT id, matricula, alumno, semestre, turno
+        FROM inscripciones
+        WHERE correo = ?
+        ORDER BY fecha DESC
+        LIMIT 1";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $correo);
+$stmt->execute();
+$result = $stmt->get_result();
+$ins = $result->fetch_assoc();
+
+if (!$ins) {
+    die("No se encontró ninguna inscripción para este alumno.");
+}
+
+$id = $ins['id'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -27,16 +57,17 @@ $id = 1;
 </nav>
 
 <div class="container my-5">
+
     <div class="card mx-auto voucher-card">
         <div class="card-body p-4">
 
             <h4 class="text-center mb-3">Comprobante de Inscripción</h4>
             <hr>
 
-            <p><strong>Nombre:</strong> Alumno Iberoamericano</p>
-            <p><strong>Matrícula:</strong> 2026-0001</p>
-            <p><strong>Semestre:</strong> 1°</p>
-            <p><strong>Turno:</strong> Matutino</p>
+            <p><strong>Nombre:</strong> <?= htmlspecialchars($ins['alumno']) ?></p>
+            <p><strong>Matrícula:</strong> <?= htmlspecialchars($ins['matricula']) ?></p>
+            <p><strong>Semestre:</strong> <?= htmlspecialchars($ins['semestre']) ?></p>
+            <p><strong>Turno:</strong> <?= htmlspecialchars($ins['turno']) ?></p>
             <p><strong>Monto:</strong> $3,500.00 MXN</p>
 
             <div class="alert alert-info">
@@ -44,11 +75,11 @@ $id = 1;
             </div>
 
             <div class="d-flex justify-content-end gap-2 no-print">
-                <button type="button" class="btn btn-secondary" onclick="window.print()">
+                <button type="button" class="btn btn-secondary" onclick="window.print();">
                     Imprimir
                 </button>
 
-                <!-- ✅ ESTE BOTÓN SÍ DESCARGA EL PDF -->
+                <!-- DESCARGA PDF CORRECTA -->
                 <a href="voucher-pdf.php?id=<?= $id ?>" class="btn btn-primary">
                     Descargar PDF
                 </a>
@@ -56,6 +87,7 @@ $id = 1;
 
         </div>
     </div>
+
 </div>
 
 </body>
