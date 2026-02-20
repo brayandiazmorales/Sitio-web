@@ -33,11 +33,11 @@ $result = $conn->query($sql);
     <div class="container-fluid">
         <span class="navbar-brand">Preparatoria Iberoamericana</span>
         <div>
+            <a href="reporte-pagos.php" class="btn btn-outline-light btn-sm me-2">
+                Reporte de Pagos
+            </a>
             <a href="alta-alumno.php" class="btn btn-outline-light btn-sm me-2">
                 Alta de Alumno
-            </a>
-            <a href="validar-pago.php" class="btn btn-outline-light btn-sm me-2">
-                Validar Pago
             </a>
             <a href="logout.php" class="btn btn-light btn-sm">
                 Cerrar sesión
@@ -49,7 +49,7 @@ $result = $conn->query($sql);
 <!-- CONTENIDO -->
 <div class="container my-5">
 
-    <h3 class="mb-4">Validación de Inscripciones</h3>
+    <h3 class="mb-4">Validación de Inscripciones y Pagos</h3>
 
     <div class="card">
         <div class="card-body table-responsive">
@@ -65,6 +65,7 @@ $result = $conn->query($sql);
                         <th>Referencia</th>
                         <th>Estado Académico</th>
                         <th>Estado de Pago</th>
+                        <th>Comprobante</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -95,17 +96,40 @@ $result = $conn->query($sql);
                             <td>
                                 <?php if ($row['estado_pago'] === 'Pagado'): ?>
                                     <span class="badge bg-success">Pagado</span>
+                                <?php elseif ($row['estado_pago'] === 'En revisión'): ?>
+                                    <span class="badge bg-info text-dark">En revisión</span>
                                 <?php else: ?>
                                     <span class="badge bg-warning text-dark">Pendiente</span>
                                 <?php endif; ?>
                             </td>
 
+                            <!-- Comprobante -->
+                            <td>
+                                <?php if (!empty($row['comprobante_pago'])): ?>
+                                    <a href="<?= htmlspecialchars($row['comprobante_pago']) ?>"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Ver
+                                    </a>
+                                <?php else: ?>
+                                    —
+                                <?php endif; ?>
+                            </td>
+
                             <!-- Acciones -->
                             <td>
+                                <?php if ($row['estado_pago'] === 'En revisión'): ?>
+                                    <a href="autorizar-pago.php?id=<?= $row['id'] ?>"
+                                       class="btn btn-success btn-sm mb-1"
+                                       onclick="return confirm('¿Autorizar este pago?');">
+                                        Autorizar pago
+                                    </a>
+                                <?php endif; ?>
+
                                 <?php if ($row['estado'] === 'Pendiente'): ?>
                                     <a href="validar.php?id=<?= $row['id'] ?>"
-                                       class="btn btn-success btn-sm mb-1">
-                                        Validar
+                                       class="btn btn-primary btn-sm mb-1">
+                                        Validar inscripción
                                     </a>
                                 <?php endif; ?>
 
@@ -123,7 +147,7 @@ $result = $conn->query($sql);
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="9" class="text-center">
+                        <td colspan="10" class="text-center">
                             No hay registros.
                         </td>
                     </tr>

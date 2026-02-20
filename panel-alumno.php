@@ -11,7 +11,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'alumno') {
 /* Correo del alumno desde sesión */
 $correoAlumno = $_SESSION['correo'];
 
-/* Obtener inscripción más reciente (si existe) */
+/* Obtener inscripción más reciente */
 $sql = "SELECT id, matricula, semestre, turno, grupo, estado, estado_pago
         FROM inscripciones
         WHERE correo = ?
@@ -30,11 +30,7 @@ $inscripcion = $result->fetch_assoc();
     <meta charset="UTF-8">
     <title>Panel del Alumno</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -49,19 +45,22 @@ $inscripcion = $result->fetch_assoc();
 
 <div class="container my-5">
 
-    <!-- MENSAJE DE ESTADO (SI APLICA) -->
+    <!-- MENSAJE DE ESTADO -->
     <?php if (!$inscripcion): ?>
         <div class="alert alert-info text-center mb-4">
-            Aún no has realizado tu inscripción. Para continuar, completa el formulario de inscripción.
+            Aún no has realizado tu inscripción. Para continuar, completa el formulario.
         </div>
-    <?php elseif ($inscripcion['estado_pago'] !== 'Pagado'): ?>
+    <?php elseif ($inscripcion['estado_pago'] === 'Pendiente'): ?>
         <div class="alert alert-warning text-center mb-4">
-            Tu inscripción está registrada, pero tu pago aún no ha sido validado.
-            Puedes descargar tu voucher para realizar el pago.
+            Tu inscripción está registrada, pero aún no has enviado tu comprobante de pago.
+        </div>
+    <?php elseif ($inscripcion['estado_pago'] === 'En revisión'): ?>
+        <div class="alert alert-info text-center mb-4">
+            Tu comprobante fue enviado y está en revisión por el área administrativa.
         </div>
     <?php else: ?>
         <div class="alert alert-success text-center mb-4">
-            Tu pago ha sido validado correctamente. Bienvenido al sistema.
+            ✅ Tu pago ha sido validado correctamente.
         </div>
     <?php endif; ?>
 
@@ -71,61 +70,80 @@ $inscripcion = $result->fetch_assoc();
         <p class="text-muted">Sistema de Inscripciones Escolares</p>
     </div>
 
-    <!-- TARJETAS PRINCIPALES -->
+    <!-- TARJETAS -->
     <div class="row g-4 mb-5">
 
         <!-- INSCRIPCIÓN -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card text-center shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title">Inscripción</h5>
-                    <p class="card-text">Realiza o consulta tu inscripción al semestre.</p>
-                    <a href="inscripcion.html" class="btn btn-primary">
-                        Acceder
-                    </a>
+                    <p class="card-text">Registro al semestre.</p>
+                    <?php if (!$inscripcion): ?>
+                        <a href="inscripcion.html" class="btn btn-primary">Acceder</a>
+                    <?php else: ?>
+                        <span class="badge bg-success">✅ Inscripción completada</span>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
 
         <!-- COMPROBANTE -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card text-center shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title">Comprobante</h5>
-                    <p class="card-text">Consulta o descarga tu voucher de pago.</p>
-                    <?php if ($inscripcion): ?>
-                        <a href="voucher.php" class="btn btn-primary">
-                            Ver
+                    <p class="card-text">Pago bancario.</p>
+
+                    <?php if (!$inscripcion): ?>
+                        <button class="btn btn-secondary" disabled>No disponible</button>
+
+                    <?php elseif ($inscripcion['estado_pago'] === 'Pendiente'): ?>
+                        <a href="subir-comprobante.php" class="btn btn-warning">
+                            Subir comprobante
                         </a>
+
+                    <?php elseif ($inscripcion['estado_pago'] === 'En revisión'): ?>
+                        <span class="badge bg-info text-dark">
+                            En revisión
+                        </span>
+
                     <?php else: ?>
-                        <button class="btn btn-secondary" disabled>
-                            No disponible
-                        </button>
+                        <span class="badge bg-success">
+                            ✅ Pago completado
+                        </span>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
 
         <!-- DATOS PERSONALES -->
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card text-center shadow h-100">
                 <div class="card-body">
                     <h5 class="card-title">Datos personales</h5>
-                    <p class="card-text">Consulta tu información registrada.</p>
-                    <a href="#" class="btn btn-primary">
-                        Consultar
-                    </a>
+                    <p class="card-text">Información registrada.</p>
+                    <a href="datos-personales.php" class="btn btn-primary">Consultar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORIAL DE PAGOS -->
+        <div class="col-md-3">
+            <div class="card text-center shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Historial de pagos</h5>
+                    <p class="card-text">Pagos realizados.</p>
+                    <a href="historial-pagos.php" class="btn btn-primary">Ver historial</a>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- ANUNCIO INSTITUCIONAL -->
+    <!-- ANUNCIO -->
     <div class="text-center">
-        <img src="img/aviso.png"
-             class="img-fluid rounded shadow w-75"
-             alt="Aviso institucional">
+        <img src="img/aviso.png" class="img-fluid rounded shadow w-75" alt="Aviso institucional">
     </div>
 
 </div>
