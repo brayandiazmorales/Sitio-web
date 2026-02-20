@@ -1,14 +1,12 @@
 <?php
-// Datos de conexión
-$host = "localhost";
+$host = "127.0.0.1";  // 👈 CAMBIADO
 $user = "root";
-$pass = ""; // En XAMPP la contraseña está vacía
+$pass = "";
 $db   = "sistema_inscripciones";
 
-// Crear conexión
 $conn = new mysqli($host, $user, $pass, $db);
 
-// Verificar conexión
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
+?>
