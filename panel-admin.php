@@ -33,12 +33,19 @@ $result = $conn->query($sql);
     <div class="container-fluid">
         <span class="navbar-brand">Preparatoria Iberoamericana</span>
         <div>
+            <!-- ✅ NUEVO: ADMINISTRADORES -->
+            <a href="admins.php" class="btn btn-outline-light btn-sm me-2">
+                Administradores
+            </a>
+
             <a href="reporte-pagos.php" class="btn btn-outline-light btn-sm me-2">
                 Reporte de Pagos
             </a>
+
             <a href="alta-alumno.php" class="btn btn-outline-light btn-sm me-2">
                 Alta de Alumno
             </a>
+
             <a href="logout.php" class="btn btn-light btn-sm">
                 Cerrar sesión
             </a>
@@ -71,7 +78,7 @@ $result = $conn->query($sql);
                 </thead>
 
                 <tbody>
-                <?php if ($result->num_rows > 0): ?>
+                <?php if ($result && $result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?= htmlspecialchars($row['matricula']) ?></td>
@@ -119,7 +126,7 @@ $result = $conn->query($sql);
                             <!-- Acciones -->
                             <td>
                                 <?php if ($row['estado_pago'] === 'En revisión'): ?>
-                                    <a href="autorizar-pago.php?id=<?= $row['id'] ?>"
+                                    <a href="autorizar-pago.php?id=<?= (int)$row['id'] ?>"
                                        class="btn btn-success btn-sm mb-1"
                                        onclick="return confirm('¿Autorizar este pago?');">
                                         Autorizar pago
@@ -127,7 +134,7 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
 
                                 <?php if ($row['estado'] === 'Pendiente'): ?>
-                                    <a href="validar.php?id=<?= $row['id'] ?>"
+                                    <a href="validar.php?id=<?= (int)$row['id'] ?>"
                                        class="btn btn-primary btn-sm mb-1">
                                         Validar inscripción
                                     </a>
@@ -137,12 +144,13 @@ $result = $conn->query($sql);
                                       method="POST"
                                       style="display:inline;"
                                       onsubmit="return confirm('¿Seguro que deseas eliminar esta inscripción?');">
-                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                    <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         Eliminar
                                     </button>
                                 </form>
                             </td>
+
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
