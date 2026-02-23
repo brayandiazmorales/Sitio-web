@@ -49,7 +49,7 @@
             <hr>
 
             <div class="text-center">
-                <a href="auth/login-admin.php" class="text-decoration-none">
+                <a href="auth/login.php" class="text-decoration-none">
                     Iniciar sesión como administrador
                 </a>
             </div>
