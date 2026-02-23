@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* =========================
    1. Recibir datos del formulario
@@ -44,10 +45,8 @@ if ($result->num_rows === 1) {
 
     $usuario = $result->fetch_assoc();
 
-    /* 🔐 Regenerar sesión (seguridad) */
     session_regenerate_id(true);
 
-    /* Crear sesión */
     $_SESSION['id']     = $usuario['id'];
     $_SESSION['nombre'] = $usuario['nombre'];
     $_SESSION['correo'] = $usuario['correo'];
@@ -56,18 +55,16 @@ if ($result->num_rows === 1) {
     /* =========================
        6. Redirección por rol
     ========================= */
-
     if ($usuario['rol'] === 'admin') {
-        header("Location: panel-admin.php");
+        header("Location: ../admin/panel-admin.php");
         exit;
     }
 
     if ($usuario['rol'] === 'alumno') {
-        header("Location: panel-alumno.php");
+        header("Location: ../alumno/panel-alumno.php");
         exit;
     }
 
-    /* Si el rol no es válido */
     session_destroy();
     die("❌ Rol no autorizado.");
 

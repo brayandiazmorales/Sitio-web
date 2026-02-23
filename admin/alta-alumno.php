@@ -1,19 +1,21 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* Solo admin */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../auth/login-admin.php");
     exit;
 }
 
 $mensaje = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre = trim($_POST['nombre']);
-    $correo = trim($_POST['correo']);
-    $password = trim($_POST['password']);
+
+    $nombre   = trim($_POST['nombre'] ?? '');
+    $correo   = trim($_POST['correo'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
     if ($nombre && $correo && $password) {
 
@@ -21,17 +23,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensaje = "❌ El correo debe ser institucional.";
         } else {
 
-            $hash = hash('sha256', $password);
+            $passwordHash = hash('sha256', $password);
 
             $sql = "INSERT INTO usuarios (nombre, correo, password, rol)
-                    VALUES (?, ?, ?, 'admin')";
+                    VALUES (?, ?, ?, 'alumno')";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $nombre, $correo, $hash);
+            $stmt->bind_param("sss", $nombre, $correo, $passwordHash);
 
             if ($stmt->execute()) {
-                $mensaje = "✅ Administrador agregado correctamente.";
+                $mensaje = "✅ Alumno dado de alta correctamente.";
             } else {
-                $mensaje = "❌ El correo ya existe.";
+                $mensaje = "❌ Error: el correo ya existe.";
             }
         }
     } else {
@@ -43,12 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Alta de Administrador</title>
+    <title>Alta de Alumno</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="bg-light">
+
 <div class="container my-5" style="max-width:500px;">
-    <h4 class="mb-4">Alta de Administrador</h4>
+    <h4 class="mb-4">Alta de Alumno</h4>
 
     <?php if ($mensaje): ?>
         <div class="alert alert-info"><?= htmlspecialchars($mensaje) ?></div>
@@ -62,18 +67,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="mb-3">
             <label>Correo institucional</label>
-            <input type="email" name="correo" class="form-control" required>
+            <input type="email" name="correo" class="form-control"
+                   placeholder="alumno@ibero.edu.mx" required>
         </div>
 
         <div class="mb-3">
-            <label>Contraseña</label>
+            <label>Contraseña inicial</label>
             <input type="text" name="password" class="form-control" required>
         </div>
 
-        <button class="btn btn-primary w-100">Registrar administrador</button>
+        <button class="btn btn-primary w-100">Registrar Alumno</button>
     </form>
 
-    <a href="panel-admin.php" class="btn btn-link mt-3">← Volver</a>
+    <a href="panel-admin.php" class="btn btn-link mt-3">← Volver al panel</a>
 </div>
+
+<p class="text-center mt-3 mb-0 text-muted">
+    © 2026 Preparatoria Iberoamericana
+</p>
+
 </body>
 </html>

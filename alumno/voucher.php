@@ -1,10 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* Seguridad: solo alumno */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'alumno') {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit;
 }
 
@@ -39,13 +40,9 @@ $id = $ins['id'];
     <title>Comprobante de Inscripción</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body class="fondo-panel">
 
 <nav class="navbar navbar-dark bg-primary shadow">
@@ -56,10 +53,8 @@ $id = $ins['id'];
 </nav>
 
 <div class="container my-5">
-
     <div class="card mx-auto voucher-card">
         <div class="card-body p-4">
-
             <h4 class="text-center mb-3">Comprobante de Inscripción</h4>
             <hr>
 
@@ -71,7 +66,7 @@ $id = $ins['id'];
 
             <?php if ($ins['estado_pago'] === 'Pagado'): ?>
                 <div class="alert alert-success text-center mt-3">
-                     El pago ya fue validado. Este voucher se encuentra pagado.
+                    El pago ya fue validado. Este voucher se encuentra pagado.
                 </div>
             <?php else: ?>
                 <div class="alert alert-info mt-3">
@@ -89,8 +84,7 @@ $id = $ins['id'];
                         Voucher pagado
                     </span>
                 <?php else: ?>
-                    <!-- DESCARGA PDF SOLO SI NO ESTÁ PAGADO -->
-                    <a href="voucher-pdf.php?id=<?= $id ?>" class="btn btn-primary">
+                    <a href="../pdf/voucher-pdf.php?id=<?= (int)$id ?>" class="btn btn-primary">
                         Descargar PDF
                     </a>
                 <?php endif; ?>
@@ -98,8 +92,11 @@ $id = $ins['id'];
 
         </div>
     </div>
-
 </div>
+
+<p class="text-center mt-3 mb-0 text-muted">
+    © 2026 Preparatoria Iberoamericana
+</p>
 
 </body>
 </html>

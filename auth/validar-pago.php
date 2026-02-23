@@ -98,6 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="panel-admin.php">← Volver al panel administrativo</a>
     </div>
 </div>
+ <p class="text-center mt-3 mb-0 text-muted">
+                © 2026 Preparatoria Iberoamericana
+            </p>
 
 </body>
 </html>

@@ -1,10 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* Seguridad: solo admin */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../auth/login-admin.php");
     exit;
 }
 
@@ -13,7 +14,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID inválido");
 }
 
-$id = (int)$_GET['id'];
+$id = (int) $_GET['id'];
 
 /* Actualizar estado de pago */
 $sql = "UPDATE inscripciones

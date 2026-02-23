@@ -1,10 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* Seguridad: solo alumno */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'alumno') {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit;
 }
 
@@ -31,13 +32,9 @@ $datos = $result->fetch_assoc();
     <title>Datos personales</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body class="fondo-panel">
 
 <nav class="navbar navbar-dark bg-primary shadow">
@@ -48,14 +45,11 @@ $datos = $result->fetch_assoc();
 </nav>
 
 <div class="container my-5">
-
     <h3 class="mb-4 text-center">Datos personales del alumno</h3>
 
     <?php if ($datos): ?>
-        <!-- ✅ DATOS ENCONTRADOS -->
         <div class="card shadow mx-auto" style="max-width:600px;">
             <div class="card-body">
-
                 <p><strong>Nombre:</strong> <?= htmlspecialchars($datos['alumno']) ?></p>
                 <p><strong>Correo institucional:</strong> <?= htmlspecialchars($datos['correo']) ?></p>
                 <p><strong>Teléfono:</strong> <?= htmlspecialchars($datos['telefono']) ?></p>
@@ -66,24 +60,23 @@ $datos = $result->fetch_assoc();
                     <strong>Grupo:</strong>
                     <?= $datos['grupo'] ? htmlspecialchars($datos['grupo']) : 'Asignado próximamente' ?>
                 </p>
-
             </div>
         </div>
-
     <?php else: ?>
-        <!-- ❗ AÚN NO HAY INSCRIPCIÓN -->
         <div class="alert alert-warning text-center mx-auto" style="max-width:600px;">
             Aún no se han registrado tus datos personales porque no has completado la inscripción.
-
             <div class="mt-3">
-                <a href="inscripcion.html" class="btn btn-primary">
+                <a href="../inscripcion/inscripcion.html" class="btn btn-primary">
                     Realizar inscripción
                 </a>
             </div>
         </div>
     <?php endif; ?>
-
 </div>
+
+<p class="text-center mt-3 mb-0 text-muted">
+    © 2026 Preparatoria Iberoamericana
+</p>
 
 </body>
 </html>

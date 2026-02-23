@@ -1,5 +1,5 @@
 <?php
-$host = "127.0.0.1";  // 👈 CAMBIADO
+$host = "127.0.0.1";
 $user = "root";
 $pass = "";
 $db   = "sistema_inscripciones";

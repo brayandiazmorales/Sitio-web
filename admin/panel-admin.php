@@ -1,10 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* Seguridad: solo administrador */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../auth/login-admin.php");
     exit;
 }
 
@@ -23,44 +24,27 @@ $result = $conn->query($sql);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body class="fondo-panel">
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-dark bg-primary shadow">
     <div class="container-fluid">
         <span class="navbar-brand">Preparatoria Iberoamericana</span>
         <div>
-            <!-- ✅ NUEVO: ADMINISTRADORES -->
-            <a href="admins.php" class="btn btn-outline-light btn-sm me-2">
-                Administradores
-            </a>
-
-            <a href="reporte-pagos.php" class="btn btn-outline-light btn-sm me-2">
-                Reporte de Pagos
-            </a>
-
-            <a href="alta-alumno.php" class="btn btn-outline-light btn-sm me-2">
-                Alta de Alumno
-            </a>
-
-            <a href="logout.php" class="btn btn-light btn-sm">
-                Cerrar sesión
-            </a>
+            <a href="admins.php" class="btn btn-outline-light btn-sm me-2">Administradores</a>
+            <a href="reporte-pagos.php" class="btn btn-outline-light btn-sm me-2">Reporte de Pagos</a>
+            <a href="alta-alumno.php" class="btn btn-outline-light btn-sm me-2">Alta de Alumno</a>
+            <a href="../auth/logout.php" class="btn btn-light btn-sm">Cerrar sesión</a>
         </div>
     </div>
 </nav>
 
-<!-- CONTENIDO -->
 <div class="container my-5">
-
     <h3 class="mb-4">Validación de Inscripciones y Pagos</h3>
 
     <div class="card">
         <div class="card-body table-responsive">
-
             <table class="table table-striped align-middle">
                 <thead>
                     <tr>
@@ -76,7 +60,6 @@ $result = $conn->query($sql);
                         <th>Acciones</th>
                     </tr>
                 </thead>
-
                 <tbody>
                 <?php if ($result && $result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
@@ -88,7 +71,6 @@ $result = $conn->query($sql);
                             <td>$<?= number_format($row['monto'], 2) ?></td>
                             <td><?= htmlspecialchars($row['referencia']) ?></td>
 
-                            <!-- Estado académico -->
                             <td>
                                 <?php if ($row['estado'] === 'Validado'): ?>
                                     <span class="badge bg-success">Validado</span>
@@ -99,7 +81,6 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
                             </td>
 
-                            <!-- Estado de pago -->
                             <td>
                                 <?php if ($row['estado_pago'] === 'Pagado'): ?>
                                     <span class="badge bg-success">Pagado</span>
@@ -110,10 +91,9 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
                             </td>
 
-                            <!-- Comprobante -->
                             <td>
                                 <?php if (!empty($row['comprobante_pago'])): ?>
-                                    <a href="<?= htmlspecialchars($row['comprobante_pago']) ?>"
+                                    <a href="../<?= htmlspecialchars($row['comprobante_pago']) ?>"
                                        target="_blank"
                                        class="btn btn-sm btn-outline-primary">
                                         Ver
@@ -123,7 +103,6 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
                             </td>
 
-                            <!-- Acciones -->
                             <td>
                                 <?php if ($row['estado_pago'] === 'En revisión'): ?>
                                     <a href="autorizar-pago.php?id=<?= (int)$row['id'] ?>"
@@ -134,7 +113,7 @@ $result = $conn->query($sql);
                                 <?php endif; ?>
 
                                 <?php if ($row['estado'] === 'Pendiente'): ?>
-                                    <a href="validar.php?id=<?= (int)$row['id'] ?>"
+                                    <a href="../auth/validar.php?id=<?= (int)$row['id'] ?>"
                                        class="btn btn-primary btn-sm mb-1">
                                         Validar inscripción
                                     </a>
@@ -150,24 +129,22 @@ $result = $conn->query($sql);
                                     </button>
                                 </form>
                             </td>
-
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="10" class="text-center">
-                            No hay registros.
-                        </td>
+                        <td colspan="10" class="text-center">No hay registros.</td>
                     </tr>
                 <?php endif; ?>
                 </tbody>
-
             </table>
-
         </div>
     </div>
-
 </div>
+
+<p class="text-center mt-3 mb-0 text-muted">
+    © 2026 Preparatoria Iberoamericana
+</p>
 
 </body>
 </html>

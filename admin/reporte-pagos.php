@@ -1,10 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+require_once __DIR__ . '/../config/db.php';
 
 /* Seguridad: solo admin */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../auth/login-admin.php");
     exit;
 }
 
@@ -37,13 +38,9 @@ $result = $stmt->get_result();
     <title>Reporte de Pagos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body class="fondo-panel">
 
 <nav class="navbar navbar-dark bg-primary shadow">
@@ -54,10 +51,8 @@ $result = $stmt->get_result();
 </nav>
 
 <div class="container my-5">
-
     <h3 class="mb-4">Reporte de Pagos</h3>
 
-    <!-- FILTRO -->
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-4">
             <label class="form-label">Estado de pago</label>
@@ -72,10 +67,8 @@ $result = $stmt->get_result();
         </div>
     </form>
 
-    <!-- TABLA -->
     <div class="card shadow">
         <div class="card-body table-responsive">
-
             <table class="table table-striped align-middle">
                 <thead>
                     <tr>
@@ -87,7 +80,6 @@ $result = $stmt->get_result();
                         <th>Fecha de pago</th>
                     </tr>
                 </thead>
-
                 <tbody>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
@@ -112,13 +104,14 @@ $result = $stmt->get_result();
                     </tr>
                 <?php endif; ?>
                 </tbody>
-
             </table>
-
         </div>
     </div>
-
 </div>
+
+<p class="text-center mt-3 mb-0 text-muted">
+    © 2026 Preparatoria Iberoamericana
+</p>
 
 </body>
 </html>
