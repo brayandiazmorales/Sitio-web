@@ -1,10 +1,12 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/db.php";
+
+/* Conexión a la base de datos */
+require_once __DIR__ . "/../config/db.php";
 
 /* Seguridad: solo alumno logueado */
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'alumno') {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit;
 }
 
@@ -27,7 +29,7 @@ $telefono = trim($_POST["telefono"]);
 $semestre = $_POST["semestre"];
 $turno    = $_POST["turno"];
 
-// ✅ Correo tomado de la sesión
+// Correo tomado de la sesión
 $correo = $_SESSION["correo"];
 
 // Datos de pago
@@ -61,5 +63,5 @@ $stmt->execute();
    REDIRECCIÓN AL VOUCHER
 ========================= */
 
-header("Location: voucher.php");
+header("Location: ../voucher.php");
 exit;
